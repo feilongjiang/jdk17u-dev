@@ -127,13 +127,13 @@ jobs:
 
       - name: 'Create sysroot'
         run: |
-          sudo qemu-debootstrap
-          --arch=${{ matrix.debian-arch }}
-          --verbose
-          --include=fakeroot,symlinks,build-essential,libx11-dev,libxext-dev,libxrender-dev,libxrandr-dev,libxtst-dev,libxt-dev,libcups2-dev,libfontconfig1-dev,libasound2-dev,libfreetype6-dev,libpng-dev
-          --resolve-deps
-          ${{ matrix.debian-version }}
-          sysroot
+          sudo qemu-debootstrap \
+          --arch=${{ matrix.debian-arch }} \
+          --verbose \
+          --include=fakeroot,symlinks,build-essential,libx11-dev,libxext-dev,libxrender-dev,libxrandr-dev,libxtst-dev,libxt-dev,libcups2-dev,libfontconfig1-dev,libasound2-dev,libfreetype6-dev,libpng-dev \
+          --resolve-deps \
+          ${{ matrix.debian-version }} \
+          sysroot \
           ${{ matrix.debian-repository }}
           sudo cat sysroot/debootstrap/debootstrap.log
         if: steps.get-cached-sysroot.outputs.cache-hit != 'true'

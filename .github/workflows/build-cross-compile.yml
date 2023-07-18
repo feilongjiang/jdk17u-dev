@@ -126,7 +126,7 @@ jobs:
         if: steps.get-cached-sysroot.outputs.cache-hit != 'true'
 
       - name: 'Create sysroot'
-        run: >
+        run: |
           sudo qemu-debootstrap
           --arch=${{ matrix.debian-arch }}
           --verbose
@@ -135,10 +135,8 @@ jobs:
           ${{ matrix.debian-version }}
           sysroot
           ${{ matrix.debian-repository }}
-        if: steps.get-cached-sysroot.outputs.cache-hit != 'true'
-      - name: 'Check debootstrap.log'
-        run: >
           sudo cat sysroot/debootstrap/debootstrap.log
+        if: steps.get-cached-sysroot.outputs.cache-hit != 'true'
 
       - name: 'Prepare sysroot'
         run: |

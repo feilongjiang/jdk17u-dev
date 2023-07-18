@@ -136,6 +136,9 @@ jobs:
           sysroot
           ${{ matrix.debian-repository }}
         if: steps.get-cached-sysroot.outputs.cache-hit != 'true'
+      - name: 'Check debootstrap.log'
+        run: >
+          sudo cat sysroot/debootstrap/debootstrap.log
 
       - name: 'Prepare sysroot'
         run: |

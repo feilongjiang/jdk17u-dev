@@ -88,7 +88,7 @@ jobs:
             os: ubuntu-22.04
             apt-gcc-version: 10.4.0-4ubuntu1~22.04
 
-    runs-on: $${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: 'Checkout the JDK source'

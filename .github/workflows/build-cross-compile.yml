@@ -32,10 +32,6 @@ on:
         required: false
         type: string
         default: '10'
-      apt-gcc-version:
-        required: false
-        type: string
-        default: '10.3.0-1ubuntu1~20.04'
       apt-gcc-cross-suffix:
         required: false
         type: string
@@ -44,7 +40,6 @@ on:
 jobs:
   build-cross-compile:
     name: build
-    runs-on: ubuntu-20.04
 
     strategy:
       fail-fast: false
@@ -61,27 +56,39 @@ jobs:
             debian-arch: arm64
             debian-repository: https://httpredir.debian.org/debian/
             debian-version: buster
+            os: ubuntu-20.04
+            apt-gcc-version: 10.3.0-1ubuntu1~20.04
           - target-cpu: arm
             gnu-arch: arm
             debian-arch: armhf
             debian-repository: https://httpredir.debian.org/debian/
             debian-version: buster
             gnu-abi: eabihf
+            os: ubuntu-20.04
+            apt-gcc-version: 10.3.0-1ubuntu1~20.04
           - target-cpu: s390x
             gnu-arch: s390x
             debian-arch: s390x
             debian-repository: https://httpredir.debian.org/debian/
             debian-version: buster
+            os: ubuntu-20.04
+            apt-gcc-version: 10.3.0-1ubuntu1~20.04
           - target-cpu: ppc64le
             gnu-arch: powerpc64le
             debian-arch: ppc64el
             debian-repository: https://httpredir.debian.org/debian/
             debian-version: buster
+            os: ubuntu-20.04
+            apt-gcc-version: 10.3.0-1ubuntu1~20.04
           - target-cpu: riscv64
             gnu-arch: riscv64
             debian-arch: riscv64
             debian-repository: https://deb.debian.org/debian-ports
             debian-version: sid
+            os: ubuntu-22.04
+            apt-gcc-version: 10.4.0-4ubuntu1~22.04
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: 'Checkout the JDK source'
@@ -107,10 +114,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install --only-upgrade apt
           sudo apt-get install \
-              gcc-${{ inputs.gcc-major-version }}=${{ inputs.apt-gcc-version }} \
-              g++-${{ inputs.gcc-major-version }}=${{ inputs.apt-gcc-version }} \
-              gcc-${{ inputs.gcc-major-version }}-${{ matrix.gnu-arch }}-linux-gnu${{ matrix.gnu-abi}}=${{ inputs.apt-gcc-version }}${{ inputs.apt-gcc-cross-suffix }} \
-              g++-${{ inputs.gcc-major-version }}-${{ matrix.gnu-arch }}-linux-gnu${{ matrix.gnu-abi}}=${{ inputs.apt-gcc-version }}${{ inputs.apt-gcc-cross-suffix }} \
+              gcc-${{ inputs.gcc-major-version }}=${{ matrix.apt-gcc-version }} \
+              g++-${{ inputs.gcc-major-version }}=${{ matrix.apt-gcc-version }} \
+              gcc-${{ inputs.gcc-major-version }}-${{ matrix.gnu-arch }}-linux-gnu${{ matrix.gnu-abi}}=${{ matrix.apt-gcc-version }}${{ inputs.apt-gcc-cross-suffix }} \
+              g++-${{ inputs.gcc-major-version }}-${{ matrix.gnu-arch }}-linux-gnu${{ matrix.gnu-abi}}=${{ matrix.apt-gcc-version }}${{ inputs.apt-gcc-cross-suffix }} \
               libxrandr-dev libxtst-dev libcups2-dev libasound2-dev
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{ inputs.gcc-major-version }} 100 --slave /usr/bin/g++ g++ /usr/bin/g++-${{ inputs.gcc-major-version }}
 
